@@ -31,7 +31,7 @@ def chart_1(year,loading_l):
 
 
 ######################################
-#@st.cache_data
+@st.cache_data
 def chart_2(year,delivery_l):
     df=df_in[df_in['year'].isin(year)]
     
@@ -43,7 +43,7 @@ def chart_2(year,delivery_l):
                         target_col='Packages')
     plot_bar(data=grouped_df,field='Place of delivery',metric='Packages',aggrigation='sum',top=5,percent=True)
 ######################################
-#@st.cache_data
+@st.cache_data
 def chart_3(year,loading_l,delivery_l, radio_selection):
     df=df_in[df_in['year'].isin(year)]
     df=df[df['Place of loading'].isin(loading_l)]
@@ -59,7 +59,7 @@ def chart_3(year,loading_l,delivery_l, radio_selection):
     plot_heatmap(data=grouped_df,field1='Place of delivery',field2='Place of loading',metric='Packages',aggrigation='sum',top=10,percent=gr_type)
 
 ######################################
-#@st.cache_data
+@st.cache_data
 def chart_4(year,loading_l,breadown_selection):
     df=df_in[df_in['year'].isin(year)]
     df=df[df['Place of loading'].isin(loading_l)]
@@ -69,7 +69,7 @@ def chart_4(year,loading_l,breadown_selection):
                         target_col='Packages')
     plot_warehouse_yearly_quantity_3(df=grouped_df,x='Place of loading', y='Percentage', breakdown_col=breadown_selection, df_in=df_in, is_percent=True,title='Loading Locations Breakdown By Loading Type')
 ######################################
-#@st.cache_data
+@st.cache_data
 def chart_5(year,delivery_l,breadown_selection):
     df=df_in[df_in['year'].isin(year)]
     df=df[df['Place of delivery'].isin(delivery_l)]
@@ -79,7 +79,7 @@ def chart_5(year,delivery_l,breadown_selection):
                         target_col='Packages')
     plot_warehouse_yearly_quantity_3(df=grouped_df,x='Place of delivery', y='Percentage', breakdown_col=breadown_selection, df_in=df_in, is_percent=True,title='Delivery Locations Breakdown By Loading Type')
 ####################################
-#@st.cache_data
+@st.cache_data
 def chart_6(year):
     df=df_in[df_in['year'].isin(year)]
     grouped_df=grouping(df=df,
@@ -88,7 +88,7 @@ def chart_6(year):
                         target_col='Packages')
     plot_warehouse_yearly_quantity_3(df=grouped_df,x='Product group', y='Packages', breakdown_col='year', df_in=df_in, is_percent=False,title='Top 5 Product Groups')
 ####################################
-#@st.cache_data
+@st.cache_data
 def chart_7(year):
     df=df_in[df_in['year'].isin(year)]
     grouped_df=grouping(df=df,
