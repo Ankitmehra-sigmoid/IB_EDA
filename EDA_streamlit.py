@@ -114,7 +114,7 @@ def main():
     if page == "Inbound":
        
         st.header("Inbound")
-        col_y, col_p,col_d = st.beta_columns(3)
+        col_y, col_p,col_d = st.columns(3)
         with col_y:
             st.write('Year')
             options = [2022,2023,2024]
@@ -140,7 +140,7 @@ def main():
 
         # st.write("You selected:", year)
         
-        col1, col2 = st.beta_columns(2)
+        col1, col2 = st.columns(2)
         ################################
         with col1:
             chart_1(year,loading_l)
@@ -160,7 +160,7 @@ def main():
        
         breakdown_cols=['Type of Loading','Product group']
         breadown_selection = st.radio("Choose an option:", breakdown_cols)
-        col3, col4 = st.beta_columns(2)
+        col3, col4 = st.columns(2)
         
         with col3:
             chart_4(year,loading_l,breadown_selection)
@@ -168,10 +168,7 @@ def main():
         with col4:
             chart_5(year,delivery_l,breadown_selection)
             
-        # col5, col6 = st.beta_columns(2)
-        # with col5:
-        #     chart_6(year)
-            
+        
         
             
             
