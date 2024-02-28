@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 
 ############# Reading data and preprocessing######
-df_in=pd.read_csv('Cargosoft-Data_2022-2024.csv')
+df_in=pd.read_csv('Cargosoft-Data_2022-2024.csv',encoding='ISO-8859-1')
 df_in=standerdize_cols(df=df_in,selected_cols=['Place of delivery','Place of loading'])
 df_in['year']=df_in['Creation Date'].dt.year
 df_in=df_in[df_in['year']>=2022]
