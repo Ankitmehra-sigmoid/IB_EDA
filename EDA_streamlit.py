@@ -19,7 +19,7 @@ print(df_in)
 #                         group_by_2='year',
 #                         target_col='Packages')
 #     plot_warehouse_yearly_quantity_3(df=grouped_df,x='Place of loading', y='Packages', breakdown_col='year', df_in=df_in, is_percent=False,title='Top 5 Loading Locations')
-#@st.cache_data
+@st.cache_data
 def chart_1(year,loading_l):
     df=df_in[df_in['year'].isin(year)]
     df=df[df['Place of loading'].isin(loading_l)]
