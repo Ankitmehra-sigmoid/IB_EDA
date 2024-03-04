@@ -100,6 +100,11 @@ df_pm['PAK to PKT']=df_pm['Packungsinhalt']/df_pm['Gebindeinhalt']
 df_pm['Material']=df_pm['Material'].astype(str)
 df_it=pd.merge(df_it,df_pm,on='Material',how='left')
 df_it['Number of Outer']=df_it['Menge']/df_it['Gebindeinhalt']
+df_it['Werk'].replace('4135', 'LANGENHAGEN', inplace=True)
+df_it['Werk'].replace('4177', 'DREIEICH', inplace=True)
+df_it['Werk'].replace('4156', 'KREFELD', inplace=True)
+df_it['Werk'].replace('4164', 'MEERANE', inplace=True)
+
 
 
 def chart_it1(x,y):
