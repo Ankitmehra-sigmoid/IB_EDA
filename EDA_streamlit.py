@@ -144,9 +144,9 @@ def chart_it6(year, percent_or_unit):
         gr_type=False
     grouped_df=grouping(df=df,
                         group_by_1='Werk',
-                        group_by_2='Fabrik',
+                        group_by_2='Produktgruppe',
                         target_col='Number of Outer')
-    plot_heatmap(data=grouped_df,field1='Werk',field2='Fabrik',metric='Number of Outer',aggrigation='sum',top=20,percent=gr_type)
+    plot_heatmap(data=grouped_df,field1='Werk',field2='Produktgruppe',metric='Number of Outer',aggrigation='sum',top=20,percent=gr_type)
 ############################################################ OUTBOUND##############################################################################
 # df_ob_22=pd.read_csv('outbound_processed_2022.csv')
 # df_ob_23=pd.read_csv('outbound_processed_2023.csv')
