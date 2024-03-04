@@ -99,7 +99,7 @@ df_pm=df_pm[['Material','ME','Gebindeinhalt','Packungsinhalt']]
 df_pm['PAK to PKT']=df_pm['Packungsinhalt']/df_pm['Gebindeinhalt']
 df_pm['Material']=df_pm['Material'].astype(str)
 df_it=pd.merge(df_it,df_pm,on='Material',how='left')
-df_it['Number of packet']=df_it['Menge']/df_it['Gebindeinhalt']
+df_it['Number of Outer']=df_it['Menge']/df_it['Gebindeinhalt']
 
 
 def chart_it1(x,y):
@@ -107,7 +107,7 @@ def chart_it1(x,y):
 
 def chart_donut_it(year,radio_selection):
    df=df_it[df_it['year'].isin(year)]
-   plot_donut(data=df,field2=radio_selection,metric='Menge')
+   plot_donut(data=df,field2=radio_selection,metric='Number of Outer')
 
 
 
@@ -116,7 +116,7 @@ def chart_it3(year):
     grouped_df=grouping(df=df,
                         group_by_1='Werk',
                         group_by_2='Produktgruppe',
-                        target_col='Menge')
+                        target_col='Number of Outer')
     plot_warehouse_yearly_quantity_3(df=grouped_df,x='Werk', y='Percentage', breakdown_col='Produktgruppe', df_in=df_in, is_percent=True,title='Breakdown internal transfer qty by warehouse and product group')
 
 def chart_it4(year):
@@ -126,13 +126,13 @@ def chart_it4(year):
     grouped_df=grouping(df=df,
                         group_by_1='Werk',
                         group_by_2='Fabrik',
-                        target_col='Menge')
+                        target_col='Number of Outer')
     plot_warehouse_yearly_quantity_3(df=grouped_df,x='Werk', y='Percentage', breakdown_col='Fabrik', df_in=df_in, is_percent=True,title='Breakdown internal transfer qty by warehouse and Fabrik')
 
 def chart_it5(year,radio_selection):
     df=df_it[df_it['year'].isin(year)]
-    df=df.groupby([radio_selection,'month'])['Menge'].sum().reset_index()
-    create_line_graph(df=df, time_col='month', packages_col='Menge', category_col=radio_selection)
+    df=df.groupby([radio_selection,'month'])['Number of Outer'].sum().reset_index()
+    create_line_graph(df=df, time_col='month', packages_col='Number of Outer', category_col=radio_selection)
 
 def chart_it6(year, percent_or_unit):
     df=df_it[df_it['year'].isin(year)]
@@ -145,8 +145,8 @@ def chart_it6(year, percent_or_unit):
     grouped_df=grouping(df=df,
                         group_by_1='Werk',
                         group_by_2='Fabrik',
-                        target_col='Menge')
-    plot_heatmap(data=grouped_df,field1='Werk',field2='Fabrik',metric='Menge',aggrigation='sum',top=20,percent=gr_type)
+                        target_col='Number of Outer')
+    plot_heatmap(data=grouped_df,field1='Werk',field2='Fabrik',metric='Number of Outer',aggrigation='sum',top=20,percent=gr_type)
 ############################################################ OUTBOUND##############################################################################
 # df_ob_22=pd.read_csv('outbound_processed_2022.csv')
 # df_ob_23=pd.read_csv('outbound_processed_2023.csv')
@@ -319,7 +319,7 @@ def main():
         
         col1, col2 = st.columns(2)
         with col1:
-            chart_it1(x=radio_selection,y='Menge')
+            chart_it1(x=radio_selection,y='Number of Outer')
         with col2:
             chart_donut_it(year,radio_selection)
         
