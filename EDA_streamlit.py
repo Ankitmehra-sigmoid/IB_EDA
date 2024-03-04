@@ -12,8 +12,8 @@ def load_data(filepath,type):
         data=pd.read_excel(filepath)
     return data
     
-# df_in=pd.read_excel('Cargosoft-Data_2022-2024.xlsx')
-df_in=load_data('Cargosoft-Data_2022-2024.xlsx',excel)
+#df_in=pd.read_excel('Cargosoft-Data_2022-2024.xlsx')
+# df_in=load_data('Cargosoft-Data_2022-2024.xlsx',excel)
 df_in=standerdize_cols(df=df_in,selected_cols=['Place of delivery','Place of loading'])
 df_in['year']=df_in['Creation Date'].dt.year
 df_in['month']=df_in['Creation Date'].dt.month
@@ -93,8 +93,8 @@ def chart_6(year,radio_selection):
     create_line_graph(df=df, time_col='month', packages_col='Packages', category_col=radio_selection)
     
 #######################################################  INTERNAL TRANSFER  #################################################################
-# df_it=pd.read_excel('Quertransporte_SAP_data.xlsx')
-df_it=load_data('Quertransporte_SAP_data.xlsx',excel)
+df_it=pd.read_excel('Quertransporte_SAP_data.xlsx')
+# df_it=load_data('Quertransporte_SAP_data.xlsx',excel)
 trans_cols=['Werk','Fabrik','Produktgruppe','BME','EME']
 df_it=standerdize_cols(df=df_it,selected_cols=trans_cols)
 df_it['year']=df_it['Buch.dat.'].dt.year
