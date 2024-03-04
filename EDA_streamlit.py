@@ -161,7 +161,7 @@ df_ob['ShPt']=df_ob['ShPt'].astype(int).astype(str)
 df_ob['Material']=df_ob['Material'].astype(str)
 df_ob['UoM'].replace('ST ', 'ST', inplace=True)
 df_ob['UoM'].replace('KG ', 'KG', inplace=True)
-
+df_ob.rename(columns={'PKT real': 'Number of PKT'},inplace=True)
 
 
 def chart_ob1(x,y):
