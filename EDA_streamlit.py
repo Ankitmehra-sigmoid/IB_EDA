@@ -117,6 +117,7 @@ def chart_it3(year):
                         group_by_1='Werk',
                         group_by_2='Produktgruppe',
                         target_col='Number of Outer')
+    grouped_df['Werk']=grouped_df['Werk'].astype(str)
     plot_warehouse_yearly_quantity_3(df=grouped_df,x='Werk', y='Percentage', breakdown_col='Produktgruppe', df_in=df_in, is_percent=True,title='Breakdown internal transfer qty by warehouse and product group')
 
 def chart_it4(year):
@@ -127,6 +128,7 @@ def chart_it4(year):
                         group_by_1='Werk',
                         group_by_2='Fabrik',
                         target_col='Number of Outer')
+    grouped_df['Werk']=grouped_df['Werk'].astype(str)
     plot_warehouse_yearly_quantity_3(df=grouped_df,x='Werk', y='Percentage', breakdown_col='Fabrik', df_in=df_in, is_percent=True,title='Breakdown internal transfer qty by warehouse and Fabrik')
 
 def chart_it5(year,radio_selection):
