@@ -11,8 +11,7 @@ df_in['month']=df_in['Creation Date'].dt.month
 df_in=df_in[df_in['year']>=2022]
 print(df_in)
 df_in['loading time']=df_in['Pick up or departed actual']
-# df_in['delivery time']=
-# df_in['unloading time']=
+
 #######################################Inbound#######################################################################
 def chart1(x,y):
     
@@ -92,7 +91,7 @@ df_it['year']=df_it['Buch.dat.'].dt.year
 df_it['month']=df_it['Buch.dat.'].dt.month
 df_it['Menge']=df_it['Menge']*(-1)
 df_it=df_it[df_it['year']>=2022]
-df_it['Werk']=df_it['Werk'].astype('str')
+df_it['Werk']=df_it['Werk'].astype(str)
 
 
 def chart_it1(x,y):
