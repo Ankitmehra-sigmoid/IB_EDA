@@ -8,7 +8,7 @@ import plotly.express as px
 def load_data(filepath,type):
     if type=='csv':
         data = pd.read_csv(filepath)
-    if type=='excel'
+    if type=='excel':
         data=pd.read_excel(filepath)
     return data
     
