@@ -90,8 +90,16 @@ df_it=standerdize_cols(df=df_it,selected_cols=trans_cols)
 df_it['year']=df_it['Buch.dat.'].dt.year
 df_it['month']=df_it['Buch.dat.'].dt.month
 df_it['Menge']=df_it['Menge']*(-1)
+
 df_it=df_it[df_it['year']>=2022]
 df_it['Werk']=df_it['Werk'].astype(str)
+df_it['Material']=df_it['Material'].astype(str)
+df_pm=pd.read_excel('EXPORT 05.01.2024.XLSX')
+df_pm=df_pm[['Material','ME','Gebindeinhalt','Packungsinhalt']]
+df_pm['PAK to PKT']=df_pm['Packungsinhalt']/df_pm['Gebindeinhalt']
+df_pm['Material']=df_pm['Material'].astype(str)
+df_it=pd.merge(df_it,df_pm,on='Material',how='left')
+df_it['Number of packet']=df_it['Menge']/df_it['Gebindeinhalt']
 
 
 def chart_it1(x,y):
