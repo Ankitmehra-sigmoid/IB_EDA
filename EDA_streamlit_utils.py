@@ -274,9 +274,9 @@ def plot_heatmap(data,field1,field2,metric,aggrigation,top,percent=False):
                              
     #print(grouped_data.head())
     top_field1_group=data.groupby([field1], as_index=False)\
-    .agg({'Packages':['sum','mean'],metric:['sum','mean']})
+    .agg({metric:['sum','mean'],metric:['sum','mean']})
     top_field1_group.columns = top_field1_group.columns.map('_'.join)
-    top_field1_group['percentage_sales']=(top_field1_group['Packages_sum']/sum(top_field1_group['Packages_sum']))*100
+    top_field1_group['percentage_sales']=(top_field1_group[metric+'_sum']/sum(top_field1_group[metric+'_sum']))*100
     top_field1_group['Rank'] = top_field1_group['percentage_sales'].rank(ascending=False)
     top_field1_group=top_field1_group.sort_values(by=['percentage_sales'],ascending=False).head(top)
 
@@ -284,9 +284,9 @@ def plot_heatmap(data,field1,field2,metric,aggrigation,top,percent=False):
     top_field1=list(top_field1_group[field1+str('_')])
 
     top_field2_group=data.groupby([field2], as_index=False)\
-    .agg({'Packages':['sum','mean'],metric:['sum','mean']})
+    .agg({metric:['sum','mean'],metric:['sum','mean']})
     top_field2_group.columns = top_field2_group.columns.map('_'.join)
-    top_field2_group['percentage_sales']=(top_field2_group['Packages_sum']/sum(top_field2_group['Packages_sum']))*100
+    top_field2_group['percentage_sales']=(top_field2_group[metric+'_sum']/sum(top_field2_group[metric+'_sum']))*100
     top_field2_group['Rank'] = top_field2_group['percentage_sales'].rank(ascending=False)
     # top_field2_group=top_field2_group.sort_values(by=['percentage_sales'],ascending=False).head(top)
     top_field2_group=top_field2_group.sort_values(by=['percentage_sales'],ascending=False)
@@ -329,3 +329,130 @@ def plot_heatmap(data,field1,field2,metric,aggrigation,top,percent=False):
         plot_heatmap_percent(percent_inbound,field1,field2)
     else:
         plot_heatmap_normal(percent_inbound,field1,field2,aggrigation)
+
+def format_integer(value):
+    if value >= 1_000_000:
+        return f'{value / 1_000_000:.2f}M'
+    elif value >= 1_000:
+        return f'{value / 1_000:.2f}K'
+    else:
+        return f'{value}'
+
+
+def monthly_distribution(cc,metric,percentage,gr_title):
+    # Create the stacked bar plot using Plotly Expres
+    df_packages_by_month=cc.groupby(['month'])[metric].sum().to_frame().reset_index()
+    df_packages_by_month[metric+str('_per')]=((df_packages_by_month[metric]/df_packages_by_month[metric].sum()))*100
+    color_palette=px.colors.sequential.Reds
+    if(percentage):
+        text_labels = df_packages_by_month[metric+str('_per')].round(2).astype(str) + '%'
+        fig = px.bar(df_packages_by_month, x='month', y=metric+str('_per'), color=metric+str('_per'),
+                     title=gr_title,
+                     labels={'Month': 'Month', metric+str('_per'): metric+str(' %')},
+                     text=text_labels,  # Specify the text labels for the bars
+                     category_orders={'Month': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']},
+                     color_discrete_sequence=color_palette)
+#         fig.update_layout(template= 'plotly_white')
+        #fig.update_yaxes(tickformat=".2%")
+        fig.show()
+    else:
+        # Apply the formatting function to each value in the metric column
+        text_labels = df_packages_by_month[metric].apply(format_integer)
+        fig = px.bar(df_packages_by_month, x='month', y=metric, color=metric,
+                     title=gr_title,
+                     labels={'Month': 'Month', metric: metric},
+                     text=text_labels,  # Specify the text labels for the bars
+                     category_orders={'Month': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']},
+                     color_discrete_sequence=color_palette)
+        fig.update_layout(template= 'plotly_white',yaxis_tickformat=',.0f',width=900)
+        #fig.update_yaxes(tickformat=".2%")
+        st.plotly_chart(fig)
+
+def side_by_side_bar(df,x,y,breakdown_by,gr_title):
+    df = df.groupby([x,breakdown_by], as_index=False)[y].sum().sort_values(by=[breakdown_by,y], ascending=[True,False])
+
+    df[breakdown_by]=df[breakdown_by].astype('str')
+    fig = px.bar(
+        df ,
+        x=x,
+        y=y,
+        color=breakdown_by,  # Differentiate bars by year using color
+        title=gr_title,
+        barmode='group'  # Set barmode to 'group' for side-by-side bars
+    )
+
+    # Update layout if necessary
+    fig.update_layout(
+        yaxis=dict(title=y),
+        xaxis=dict(title=x),
+        width=950
+    )
+
+    # Show the figure
+    st.plotly_chart(fig)
+
+def plot_donut(data,field2,metric):
+    
+        
+    df_packages_by_delivery_product=data.groupby([field2])[metric].sum().to_frame().reset_index()
+    df_packages_by_delivery_product[metric+str('_per')]=((df_packages_by_delivery_product[metric]/df_packages_by_delivery_product[metric].sum()))
+    
+    ## top 5 product groups
+    
+    # Get the top 5 most frequent values in the column
+    # Group the data by category and calculate total sales
+    category_sales = df_packages_by_delivery_product.groupby(field2)[metric].sum()
+
+    # Sort the categories based on sales in descending order
+    sorted_category_sales = category_sales.sort_values(ascending=False)
+
+    # Select the top 5 categories
+    #top_5_categories = sorted_category_sales.head(5)
+    top_values= sorted_category_sales.head(5)
+    # Replace values not in the top 5 with 'Others'
+    df_packages_by_delivery_product[field2] = df_packages_by_delivery_product[field2].apply(lambda x: x if x in top_values else 'Others')
+    
+    
+    fig = px.pie(df_packages_by_delivery_product, values=metric, names=field2,
+             title='',
+             labels={field2:field2,metric:metric},
+            hole=0.5)
+
+    fig.update_traces(textinfo='percent+label')
+
+    fig.update_layout(template= 'plotly_white')
+    st.plotly_chart(fig)
+
+def create_line_graph(df, time_col, packages_col, category_col):
+    """
+    Creates a line graph with the specified columns.
+
+    Parameters:
+    - df: pandas.DataFrame containing the data
+    - time_col: the name of the column to be used as the x-axis (time)
+    - packages_col: the name of the column to be used as the y-axis (packages)
+    - category_col: the name of the column to break down the lines by category
+
+    Returns:
+    - fig: Plotly figure object
+    """
+    # Create the line chart using Plotly Express
+    fig = px.line(
+        df,
+        x=time_col,
+        y=packages_col,
+        color=category_col,  # Different lines for each category
+        title=f'Packages Over Time by {category_col}'
+    )
+    
+    # Update layout for better readability if necessary
+    fig.update_layout(
+        xaxis_title=time_col,
+        yaxis_title=packages_col,
+        legend_title=category_col,
+        width=950 )
+    
+    # Show the figure
+    st.plotly_chart(fig)
+    
+    
