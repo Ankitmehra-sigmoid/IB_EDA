@@ -155,54 +155,36 @@ def chart_it6(year, percent_or_unit):
                         target_col='Number of Outer')
     plot_heatmap(data=grouped_df,field1='Werk',field2='Produktgruppe',metric='Number of Outer',aggrigation='sum',top=20,percent=gr_type)
 ############################################################ OUTBOUND##############################################################################
-# df_ob_22=pd.read_csv('outbound_processed_2022.csv')
-# df_ob_23=pd.read_csv('outbound_processed_2023.csv')
-# df_ob_24=pd.read_csv('outbound_processed_2024.csv')
-# df_ob_22['year']='2022'
-# df_ob_23['year']='2023'
-# df_ob_24['year']='2024'
 
-# df_ob=pd.concat([df_ob_22,df_ob_23,df_ob_24])
-
-# df_ob['ShPt']=df_ob['ShPt'].astype(int).astype(str)
-# df_ob['Material']=df_ob['Material'].astype(str)
-# df_ob['UoM'].replace('ST ', 'ST', inplace=True)
-# df_ob['UoM'].replace('KG ', 'KG', inplace=True)
-
-# df_pm=pd.read_excel('EXPORT 05.01.2024.XLSX')
-# df_pm=df_pm[['Material','ME','Gebindeinhalt','Packungsinhalt']]
-# df_pm['PAK to PKT']=df_pm['Packungsinhalt']/df_pm['Gebindeinhalt']
-# df_pm['Material']=df_pm['Material'].astype(str)
-# df_ob=pd.merge(df_ob,df_pm,on='Material',how='left')
-# df_ob['Number of PKT']=df_ob['Packed quantity']/df_ob['Gebindeinhalt']
-# df_ob['Number of PAK']=df_ob['Packed quantity']/df_ob['Packungsinhalt']
-# # df_ob['PKT real']=df_ob['Number of PAK']*df_ob['PAK to PKT']
-# df_ob['Number of PKT']=round(df_ob['Number of PKT'])
-# df_ob['Number of PAK']=round(df_ob['Number of PAK'])
-# df_ob['kg gross']=df_ob['Number of PAK']*df_ob['Bruttogewicht PAK']
+df_ob = pd.read_csv('outbound_final.csv.gz',compression='gzip')
+df_ob['ShPt']=df_ob['ShPt'].astype(int).astype(str)
+df_ob['Material']=df_ob['Material'].astype(str)
+df_ob['UoM'].replace('ST ', 'ST', inplace=True)
+df_ob['UoM'].replace('KG ', 'KG', inplace=True)
 
 
-# def chart_ob1(x,y):
-#     side_by_side_bar(df=df_ob,x=x,y=y,breakdown_by='year',gr_title='Number of PKT by '+x+' and'+' year')
+
+def chart_ob1(x,y):
+    side_by_side_bar(df=df_ob,x=x,y=y,breakdown_by='year',gr_title='Number of PKT by '+x+' and'+' year')
 
 
-# def chart_donut_ob(year,radio_selection):
-#    df=df_ob[df_ob['year'].isin(year)]
+def chart_donut_ob(year,radio_selection):
+   df=df_ob[df_ob['year'].isin(year)]
    
-#    plot_donut(data=df,field2=radio_selection,metric="Number of PKT")
+   plot_donut(data=df,field2=radio_selection,metric="Number of PKT")
 
-# def chart_ob3(year, percent_or_unit):
-#     df=df_ob[df_ob['year'].isin(year)]
+def chart_ob3(year, percent_or_unit):
+    df=df_ob[df_ob['year'].isin(year)]
     
-#     if  percent_or_unit=='Percentage':
-#         gr_type=True
-#     else:
-#         gr_type=False
-#     grouped_df=grouping(df=df,
-#                         group_by_1='ShPt',
-#                         group_by_2='Produkt Typ',
-#                         target_col="Number of PKT")
-#     plot_heatmap(data=grouped_df,field1='ShPt',field2='Produkt Typ',metric="Number of PKT",aggrigation='sum',top=20,percent=gr_type)
+    if  percent_or_unit=='Percentage':
+        gr_type=True
+    else:
+        gr_type=False
+    grouped_df=grouping(df=df,
+                        group_by_1='ShPt',
+                        group_by_2='Produkt Typ',
+                        target_col="Number of PKT")
+    plot_heatmap(data=grouped_df,field1='ShPt',field2='Produkt Typ',metric="Number of PKT",aggrigation='sum',top=20,percent=gr_type)
 
 def main():
     
@@ -345,42 +327,42 @@ def main():
         st.table(df_it[:5])
         st.write('------------------------------------------------------------------------------------------------------------------------')
 
-    # elif page == "Outbound":
+    elif page == "Outbound":
         
-    #     st.header("Analysis of Sundungsdaten mit positenen Data")
-    #     st.table(df_ob[:2])
-    #     st.write('This data is available at SKU level')
-    #     st.write('Deliverer Warehouse information is given but customer information is not present')
-    #     st.write('Dispatch condition is given')
-    #     st.write('There is another file which contains DHL shipment information,it has customer info')
-    #     st.write('The sundungsdaten file can be joined with DHL shipment data on order id, ~99% percent of data is matching ')
-    #     st.write('------------------------------------------------------------------------------------------------------------------------')
+        st.header("Analysis of Sundungsdaten mit positenen Data")
+        st.table(df_ob[:2])
+        st.write('This data is available at SKU level')
+        st.write('Deliverer Warehouse information is given but customer information is not present')
+        st.write('Dispatch condition is given')
+        st.write('There is another file which contains DHL shipment information,it has customer info')
+        st.write('The sundungsdaten file can be joined with DHL shipment data on order id, ~99% percent of data is matching ')
+        st.write('------------------------------------------------------------------------------------------------------------------------')
         
-    #     col_y, col_p,col_d = st.columns(3)
-    #     with col_y:
-    #         st.write('Year')
-    #         options = ['2022','2023','2024']
-    #         year = st.multiselect(
-    #             label='Select your options',
-    #             options=options,
-    #             default=['2022','2023','2024']  # You can set default selections here
-    #         )
+        col_y, col_p,col_d = st.columns(3)
+        with col_y:
+            st.write('Year')
+            options = ['2022','2023','2024']
+            year = st.multiselect(
+                label='Select your options',
+                options=options,
+                default=['2022','2023','2024']  # You can set default selections here
+            )
         
-    #     radio_options = ['ShPt','SC','Produkt Typ','Material','UoM']
-    #     radio_selection = st.radio("Choose an option:", radio_options)
+        radio_options = ['ShPt','SC','Produkt Typ','Material','UoM']
+        radio_selection = st.radio("Choose an option:", radio_options)
         
-    #     st.write('Total SKUs: ',df_ob['Material'].nunique())
-    #     st.table(df_ob.groupby('year')['Number of PKT'].sum().reset_index())
-        # st.write('------------------------------------------------------------------------------------------------------------------------')    
-        # col1, col2 = st.columns(2)
+        st.write('Total SKUs: ',df_ob['Material'].nunique())
+        st.table(df_ob.groupby('year')['Number of PKT'].sum().reset_index())
+        st.write('------------------------------------------------------------------------------------------------------------------------')    
+        col1, col2 = st.columns(2)
         
-        # chart_ob1(x=radio_selection,y="Number of PKT")
+        chart_ob1(x=radio_selection,y="Number of PKT")
         
-        # chart_donut_ob(year,radio_selection)
+        chart_donut_ob(year,radio_selection)
         
-        # radio_options_2= ["Percentage","Units"]
-        # percent_or_unit = st.radio("Choose an option:", radio_options_2)
-        # chart_ob3(year, percent_or_unit)
+        radio_options_2= ["Percentage","Units"]
+        percent_or_unit = st.radio("Choose an option:", radio_options_2)
+        chart_ob3(year, percent_or_unit)
     
     
     
