@@ -4,7 +4,16 @@ import pandas as pd
 import plotly.express as px
 
 ############# Reading data and preprocessing######
-df_in=pd.read_excel('Cargosoft-Data_2022-2024.xlsx')
+@st.cache  # This decorator tells Streamlit to cache the function's output
+def load_data(filepath,type):
+    if type=='csv':
+        data = pd.read_csv(filepath)
+    if type=='excel'
+        data=pd.read_excel(filepath)
+    return data
+    
+# df_in=pd.read_excel('Cargosoft-Data_2022-2024.xlsx')
+df_in=load_data('Cargosoft-Data_2022-2024.xlsx',excel)
 df_in=standerdize_cols(df=df_in,selected_cols=['Place of delivery','Place of loading'])
 df_in['year']=df_in['Creation Date'].dt.year
 df_in['month']=df_in['Creation Date'].dt.month
@@ -84,7 +93,8 @@ def chart_6(year,radio_selection):
     create_line_graph(df=df, time_col='month', packages_col='Packages', category_col=radio_selection)
     
 #######################################################  INTERNAL TRANSFER  #################################################################
-df_it=pd.read_excel('Quertransporte_SAP_data.xlsx')
+# df_it=pd.read_excel('Quertransporte_SAP_data.xlsx')
+df_it=load_data('Quertransporte_SAP_data.xlsx',excel)
 trans_cols=['Werk','Fabrik','Produktgruppe','BME','EME']
 df_it=standerdize_cols(df=df_it,selected_cols=trans_cols)
 df_it['year']=df_it['Buch.dat.'].dt.year
@@ -162,6 +172,10 @@ df_ob['Material']=df_ob['Material'].astype(str)
 df_ob['UoM'].replace('ST ', 'ST', inplace=True)
 df_ob['UoM'].replace('KG ', 'KG', inplace=True)
 df_ob.rename(columns={'PKT real': 'Number of PKT'},inplace=True)
+df_ob['ShPt'].replace('4135', 'LANGENHAGEN', inplace=True)
+df_ob['ShPt'].replace('4177', 'DREIEICH', inplace=True)
+df_ob['ShPt'].replace('4156', 'KREFELD', inplace=True)
+df_ob['ShPt'].replace('4164', 'MEERANE', inplace=True)
 
 
 def chart_ob1(x,y):
