@@ -12,7 +12,7 @@ def load_data(filepath,type):
         data=pd.read_excel(filepath)
     return data
     
-#df_in=pd.read_excel('Cargosoft-Data_2022-2024.xlsx')
+df_in=pd.read_excel('Cargosoft-Data_2022-2024.xlsx')
 # df_in=load_data('Cargosoft-Data_2022-2024.xlsx',excel)
 df_in=standerdize_cols(df=df_in,selected_cols=['Place of delivery','Place of loading'])
 df_in['year']=df_in['Creation Date'].dt.year
